@@ -9,9 +9,9 @@ def mnist():
 
     # make Datasets
     train_dataset = Dataset.from_tensor_slices(
-        (mnist.train._images, mnist.train._labels))
+        (mnist.train._images[:320, :], mnist.train._labels[:320, :]))
     test_dataset = Dataset.from_tensor_slices(
-        (mnist.test._images, mnist.test._labels))
+        (mnist.test._images[:320, :], mnist.test._labels[:320, :]))
 
     return train_dataset, test_dataset
 
