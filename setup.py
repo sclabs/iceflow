@@ -12,6 +12,7 @@ setup(
     description='tensorflow meta-framework',
     long_description=long_description,
     author='Thomas Gilgenast',
+    author_email='thomasgilgenast@gmail.com',
     url='https://github.com/sclabs/iceflow',
     packages=find_packages(),
     entry_points={
@@ -29,5 +30,5 @@ setup(
         'Intended Audience :: Science/Research',
         'Programming Language :: Python :: 3 :: Only',
         'Topic :: Scientific/Engineering :: Artificial Intelligence'
-    ],
+    ]
 )

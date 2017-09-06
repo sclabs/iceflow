@@ -4,3 +4,5 @@ __pycache__
 .idea
 MNIST_data
 test1
+build
+dist
