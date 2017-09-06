@@ -1,0 +1,6 @@
+*.pyc
+__pycache__
+*.egg-info
+.idea
+MNIST_data
+test1
