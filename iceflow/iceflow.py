@@ -1,3 +1,4 @@
+import sys
 import argparse
 
 import tensorflow as tf
@@ -72,6 +73,7 @@ def iceflow():
     tf.logging.set_verbosity(getattr(tf.logging, args.loglevel))
 
     # Dataset
+    sys.path.append('')
     train, test = getattr(__import__('datasets'), args.dataset)()
 
     # Estimator

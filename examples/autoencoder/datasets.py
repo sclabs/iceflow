@@ -22,11 +22,11 @@ def random_image_ae():
 
 
 def random_embedding():
-    embedding = np.random.random((10,)).astype(np.float32)
+    embedding = np.random.random((128,)).astype(np.float32)
     return None, Dataset.from_tensors({'z': embedding})
 
 
 def random():
     image = np.random.random((784,)).astype(np.float32)
-    embedding = np.random.random((10,)).astype(np.float32)
+    embedding = np.random.random((128,)).astype(np.float32)
     return None, Dataset.from_tensors({'x': image, 'z': embedding})
