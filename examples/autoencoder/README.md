@@ -112,3 +112,49 @@ Similarly, running
     $ iceflow decode ...
 
 is like `iceflow predict` but on the `z -> y` subgraph.
+
+Visualizing reconstructions
+---------------------------
+
+For an example of how to visualize the trained autoencoder's reconstructions of
+the first minibatch from the test set, check out `plot_reconstructions.py`,
+which draws the following output image:
+
+![](test.png)
+
+`plot_reconstructions.py` showcases three important ideas:
+
+1. It creates an Estimator instance using the `iceflow` API with the call
+
+       e = iceflow.make_estimator('test.cfg')
+
+2. It uses the `iceflow` API to obtain an `input_fn()` describing the data we
+   want to process:
+
+       input_fn = iceflow.make_input_fn(test, take=32)
+
+   In this situation, we are simply requesting the first 32 examples in the
+   `test` Dataset, without shuffling, and without repetition.
+
+   This `input_fn()` is suitable for use with the Estimator constructed above,
+   but it can also be used to obtain a concrete `numpy` array of the inputs:
+
+       with tf.Session() as sess:
+           inputs, _ = sess.run(input_fn())
+
+   Another way to get a concrete `numpy` array from the Dataset is to use the
+   following idiom from the [Dataset API](https://www.tensorflow.org/programmers_guide/datasets):
+
+       with tf.Session() as sess:
+           inputs, _ = sess.run(test.batch(32).make_one_shot_iterator().get_next())
+
+3. It performs inference in the graph of the original estimator:
+
+       outputs = np.stack(list(e.predict(input_fn)))
+
+   If we obtain data as concrete `numpy` arrays and we don't want to go through
+   the hassle of constructing a Dataset to then create an `input_fn()`, we could
+   instead do:
+
+       outputs = np.stack(list(e.predict(
+           tf.estimator.inputs.numpy_input_fn(inputs, shuffle=False))))

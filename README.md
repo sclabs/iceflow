@@ -175,6 +175,53 @@ conflicting with the `[DEFAULT]` model). To train that one, run
 
     $ iceflow train <config_file> <dataset> --config_section more_hiddens
 
+API spec
+--------
+
+The `iceflow` API currently exposes two functions:
+
+### `iceflow.make_estimator(configfile, section='DEFAULT', subgraph=None)`
+
+This function uses a configfile as described above to allow quick, reproducible,
+and tweakable instantiation of a `tf.Estimator` instance according to the
+configfile.
+
+#### Parameters
+
+ - `configfile`: the filename where the configfile may be found on the disk
+ - `section`: which section of the configfile to read from
+ - `subgraph`: a string reference to a bound method on the model specifying a
+   subgraph that inference should be performed in, or `None` if we want to use
+   the normal/full graph
+
+#### Returns
+
+The instantiated `tf.Estimator`.
+
+### `iceflow.make_input_fn(dataset, num_epochs=1, batch_size=32, shuffle=False, take=None)`
+
+This function bridges the [Dataset API](https://www.tensorflow.org/programmers_guide/datasets)
+and the `input_fn()` necessary for performing any operation with a
+`tf.Estimator`.
+
+A vanilla Dataset instance merely stores some examples, but an `input_fn()`
+indicates how those examples will be accessed (at random, or not?; in batches of
+how many?; etc.) during training, evaluation, inference, etc.
+
+#### Parameters
+
+ - `dataset`: a `tf.contrib.data.Dataset` instance to get data from
+ - `num_epochs`: how many epochs to repeat for, or `None` to repeat forever
+ - `batch_size`: size of each minibatch
+ - `shuffle`: `False` to skip shuffling, otherwise an int specifying the size of
+   the buffer to use for shuffling
+ - `take`: an int specifying the number of examples to take from the Dataset, or
+   `None` if we want to take all of them
+
+#### Returns
+
+An `input_fn()` suitable for use with a `tf.Estimator`.
+
 Design philosophy
 -----------------
 
@@ -202,9 +249,6 @@ Caveats and future directions
    tensors being printed to the command line. We plan to extend this to allow
    specification of an arbitrary Python function that takes the prediction
    results (arrays) as input.
- - Currently, there is no easy way to use IceFlow to inject a properly-restored
-   Estimator into arbitrary Python code. We plan to add a Python API to IceFlow
-   in the near future.
  - Currently, performing validation every so often during training is very
    awkward. We are awaiting the return of [ValidationMonitor](https://www.tensorflow.org/get_started/monitors#configuring_a_validationmonitor_for_streaming_evaluation)
    from its banishment in the desert of deprecation (and following

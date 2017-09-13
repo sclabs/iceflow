@@ -9,9 +9,9 @@ def mnist_ae():
 
     # make Datasets
     train_dataset = Dataset.from_tensor_slices(
-        ({'x': mnist.train._images[:320, :]}, mnist.train._images[:320, :]))
+        ({'x': mnist.train._images}, mnist.train._images))
     test_dataset = Dataset.from_tensor_slices(
-        ({'x': mnist.test._images[:320, :]}, mnist.test._images[:320, :]))
+        ({'x': mnist.test._images}, mnist.test._images))
 
     return train_dataset, test_dataset
 
